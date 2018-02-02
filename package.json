@@ -1,0 +1,24 @@
+{
+  "name": "vue-layout",
+  "version": "1.0.0",
+  "description": "A set of layout components for Vue.js",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexsasharegan/vue-layout.git"
+  },
+  "keywords": [
+    "vue",
+    "vuejs",
+    "layout"
+  ],
+  "author": "Alex Regan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexsasharegan/vue-layout/issues"
+  },
+  "homepage": "https://github.com/alexsasharegan/vue-layout#readme"
+}

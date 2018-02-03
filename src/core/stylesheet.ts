@@ -1,16 +1,55 @@
 import { RandomAlphaNumeric } from "./random";
 
-// Internal reference for a single stylesheet this plugin will manage.
-let styleSheet: CSSStyleSheet;
-export let id = RandomAlphaNumeric(16);
-
 export type CSSRuleObject = { [rule: string]: string };
+export type CSSRuleList = string[];
+export type CSSRuleOption = CSSRuleObject | CSSRuleList;
+export type CSSStyleMeta = {
+	node: HTMLStyleElement;
+	sheet: CSSStyleSheet;
+	destroy(): void;
+};
 
-function createStyleSheet(): CSSStyleSheet {
+export interface StyleManager {
+	/**
+	 * AddRule takes a CSS selector and an array of rules
+	 * or an object of rules such that `{ [property]: value }`.
+	 */
+	AddRule(selector: string, rules: CSSRuleOption): StyleManager;
+	/**
+	 * GetNode returns the underlying dom style element.
+	 */
+	GetNode(): HTMLStyleElement;
+	/**
+	 * GetSheet returns the underlying dom stylesheet.
+	 */
+	GetSheet(): CSSStyleSheet;
+	/**
+	 * Destroy the underlying stylesheet and dom node.
+	 */
+	Destroy(): void;
+}
+
+export function NewStyleManager(): StyleManager {
+	let { node, sheet, destroy } = CreateStyleSheet();
+
+	const manager = {
+		AddRule(selector: string, rules: CSSRuleOption) {
+			AddRule(sheet, selector, rules);
+			return manager;
+		},
+		GetNode: () => node,
+		GetSheet: () => sheet,
+		Destroy: destroy,
+	};
+
+	return manager;
+}
+
+export function CreateStyleSheet(): CSSStyleMeta {
 	let style = document.createElement("style");
 	// For good measure
 	style.type = "text/css";
-	style.id = id;
+	style.id = RandomAlphaNumeric(16);
 	// For recognition
 	style.setAttribute("data-v-plugin", "vue-layout");
 	// WebKit hack (still necessary?)
@@ -21,34 +60,30 @@ function createStyleSheet(): CSSStyleSheet {
 		throw new TypeError();
 	}
 
-	return style.sheet;
+	return {
+		node: style,
+		sheet: style.sheet,
+		destroy: () => document.head.removeChild(style),
+	};
 }
 
-function getStyleSheet(): CSSStyleSheet {
-	if (!styleSheet) {
-		styleSheet = createStyleSheet();
+export function AddRule(
+	styleSheet: CSSStyleSheet,
+	selector: string,
+	rules: CSSRuleOption
+): number {
+	let idx = styleSheet.rules.length;
+
+	if (!styleSheet.addRule) {
+		styleSheet.insertRule(`${selector}{${normalizeRules(rules)}}`, idx);
+		return idx;
 	}
 
-	return styleSheet;
+	styleSheet.addRule(selector, normalizeRules(rules), idx);
+	return idx;
 }
 
-type RemoveRuleFunc = () => void;
-
-export function AddRule(selector: string, rules: string[]): RemoveRuleFunc {
-	let ss = getStyleSheet();
-	let idx = ss.rules.length;
-	let rm = () => ss.removeRule(idx);
-
-	if (!ss.addRule) {
-		ss.insertRule(`${selector}{${normalizeRules(rules)}}`, idx);
-		return rm;
-	}
-
-	ss.addRule(selector, normalizeRules(rules), idx);
-	return rm;
-}
-
-function normalizeRules(rules: string[] | CSSRuleObject) {
+function normalizeRules(rules: CSSRuleOption) {
 	if (Array.isArray(rules)) {
 		return rules.join(";") + ";";
 	}

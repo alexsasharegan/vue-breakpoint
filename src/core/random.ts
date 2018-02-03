@@ -11,33 +11,33 @@ function makeRandomGenerator(chars: string) {
 }
 
 const lcStart = "a".charCodeAt(0);
-const lowercase = Array.from({ length: 26 }, (_, i) =>
+export const LCCharCodes = Array.from({ length: 26 }, (_, i) =>
 	String.fromCharCode(lcStart + i)
 );
 
 const ucStart = "A".charCodeAt(0);
-const uppercase = Array.from({ length: 26 }, (_, i) =>
+export const UCCharCodes = Array.from({ length: 26 }, (_, i) =>
 	String.fromCharCode(ucStart + i)
 );
 
 const zero = "0".charCodeAt(0);
-const numeric = Array.from({ length: 10 }, (_, i) =>
+export const NumCharCodes = Array.from({ length: 10 }, (_, i) =>
 	String.fromCharCode(zero + i)
 );
 
-export const RandomLCAlpha = makeRandomGenerator(lowercase.join(""));
-export const RandomUCAlpha = makeRandomGenerator(uppercase.join(""));
+export const RandomLCAlpha = makeRandomGenerator(LCCharCodes.join(""));
+export const RandomUCAlpha = makeRandomGenerator(UCCharCodes.join(""));
 export const RandomAlpha = makeRandomGenerator(
-	lowercase.join("") + uppercase.join("")
+	LCCharCodes.join("") + UCCharCodes.join("")
 );
 export const RandomLCAlphaNumeric = makeRandomGenerator(
-	lowercase.join("") + numeric.join("")
+	LCCharCodes.join("") + NumCharCodes.join("")
 );
 export const RandomUCAlphaNumeric = makeRandomGenerator(
-	uppercase.join("") + numeric.join("")
+	UCCharCodes.join("") + NumCharCodes.join("")
 );
 export const RandomAlphaNumeric = makeRandomGenerator(
-	lowercase.join("") + numeric.join("") + uppercase.join("")
+	LCCharCodes.join("") + NumCharCodes.join("") + UCCharCodes.join("")
 );
 export const RandomHex = (
 	len: number,

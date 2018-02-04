@@ -1,5 +1,5 @@
 {
-	"name": "vue-layout",
+	"name": "vue-breakpoint",
 	"version": "1.0.0",
 	"description": "A set of layout components for Vue.js",
 	"main": "lib/index.js",

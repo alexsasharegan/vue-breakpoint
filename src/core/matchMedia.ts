@@ -1,4 +1,4 @@
-import { MediaQueryString } from "./toMQS";
+import { MediaQueryString, MediaQueryMap } from "./toMQS";
 
 export type UnsubscribeFunc = () => void;
 
@@ -21,3 +21,11 @@ export function SubscribeToMediaQuery(
 
 	return unsubscribe;
 }
+
+export const Bootstrap4Grid: () => MediaQueryMap = () => ({
+	xs: { minWidth: "0px" },
+	sm: { minWidth: "576px" },
+	md: { minWidth: "768px" },
+	lg: { minWidth: "992px" },
+	xl: { minWidth: "1200px" },
+});

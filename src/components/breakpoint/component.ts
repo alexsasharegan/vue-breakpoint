@@ -1,23 +1,13 @@
 // @ts-ignore
 import Vue, { VueConstructor } from "vue";
-import {
-	MediaQueryMap,
-	MediaQueryFlatMap,
-	FlattenMediaQueryMap,
-} from "../../core/toMQS";
-import { SubscribeToMediaQuery } from "../../core/matchMedia";
+import { MediaQueryFlatMap, FlattenMediaQueryMap } from "../../core/toMQS";
+import { SubscribeToMediaQuery, Bootstrap4Grid } from "../../core/matchMedia";
 import { VNode } from "vue/types/vnode";
 import { CreateElement } from "vue/types/vue";
 
-export const Bootstrap4Grid: () => MediaQueryMap = () => ({
-	xs: { minWidth: "0px" },
-	sm: { minWidth: "576px" },
-	md: { minWidth: "768px" },
-	lg: { minWidth: "992px" },
-	xl: { minWidth: "1200px" },
-});
-
 export const BreakpointComponent = Vue.extend({
+	name: "breakpoint",
+
 	props: {
 		breakpointMap: {
 			required: true,
@@ -47,8 +37,11 @@ export const BreakpointComponent = Vue.extend({
 	},
 
 	computed: {
-		context(): { [alias: string]: boolean } {
-			return Object.assign(Object.create(null), this.activeMap);
+		context(): { [alias: string]: boolean | string } {
+			return {
+				active: this.active,
+				...this.activeMap,
+			};
 		},
 	},
 
@@ -76,13 +69,16 @@ export const BreakpointComponent = Vue.extend({
 	},
 
 	render(createElement: CreateElement): VNode {
+		// Reference context up front for reactivity.
+		// Copy this so internals can't be affected.
+		const ctx = { ...this.context };
+		// If the slot scope isn't used,
+		// render default slot.
 		if (!this.$scopedSlots.default) {
 			return this.$slots.default[0];
 		}
 
-		let rendered = this.$scopedSlots.default(
-			Object.assign({ breakpoint: this.active }, this.context)
-		);
+		const rendered = this.$scopedSlots.default(ctx);
 
 		if (typeof rendered == "string") {
 			return createElement("span", rendered);

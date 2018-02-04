@@ -1,4 +1,4 @@
 export {
 	BreakpointComponent,
 	BreakpointPlugin,
-} from "./components/breakpoint/";
+} from "./components/breakpoint/index";

@@ -3,5 +3,6 @@
 
 node_modules/
 lib/
+dist/
 tmp/
 coverage/

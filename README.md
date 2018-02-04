@@ -10,7 +10,9 @@ A vue layout component to provide dynamic, reactive media query information.
 Uses the
 [match media api](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia).
 
-Heavily inspired from [Full Stack Radio #81](http://www.fullstackradio.com/81) [vue-mq](https://github.com/AlexandreBonaventure/vue-mq)
+Heavily inspired from
+[Full Stack Radio episode #81](http://www.fullstackradio.com/81) and the
+[vue-mq library](https://github.com/AlexandreBonaventure/vue-mq).
 
 ## Install
 
@@ -96,7 +98,7 @@ built-in bootstrap 4 style map. You can find it's definition
 
 Once you have the breakpoints decided and the installation taken care of, wrap
 some of your layout in a `<breakpoint>` component _(wrap an element/component
-with a single root node)_ and defined the `slot-scope` attribute. The value of
+with a single root node)_ and define the `slot-scope` attribute. The value of
 `slot-scope` is the parameter name for the object that will hold all the
 breakpoint values. For example:
 
@@ -127,8 +129,10 @@ relevant values more easily.
 </breakpoint>
 ```
 
-For more info, consult the Vue documentation on [scoped slots.](https://vuejs.org/v2/guide/components.html#Scoped-Slots)
+For more info, consult the Vue documentation on
+[scoped slots.](https://vuejs.org/v2/guide/components.html#Scoped-Slots)
 
 ## Try It Out
 
-Hack on this fiddle: [vue-breakpoint jsfiddle](https://jsfiddle.net/alexsasharegan/wbrnvwca/)
+Hack on this fiddle:
+[vue-breakpoint jsfiddle](https://jsfiddle.net/alexsasharegan/wbrnvwca/)

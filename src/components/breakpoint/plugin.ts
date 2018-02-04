@@ -8,13 +8,13 @@ export const BreakpointPlugin: PluginObject<MediaQueryMap> = {
 		const flatMap = FlattenMediaQueryMap(mqm);
 
 		const Rx = new Vue({
-			data: {
-				active: "",
-				...Object.keys(flatMap).reduce((map: ActiveMap, alias: string) => {
+			data: Object.assign(
+				{ active: "" },
+				Object.keys(flatMap).reduce((map: ActiveMap, alias: string) => {
 					map[alias] = false;
 					return map;
-				}, {}),
-			},
+				}, {})
+			),
 		});
 
 		for (let alias of Object.keys(flatMap)) {
@@ -41,7 +41,7 @@ export const BreakpointPlugin: PluginObject<MediaQueryMap> = {
 				render(createElement: CreateElement): VNode {
 					// Reference context up front for reactivity.
 					// Copy this so internals can't be affected.
-					const ctx = { ...this.context };
+					const ctx = Object.assign({}, this.context);
 
 					// If the slot scope isn't used,
 					// render default slot.

@@ -38,10 +38,7 @@ export const BreakpointComponent = Vue.extend({
 
 	computed: {
 		context(): { [alias: string]: boolean | string } {
-			return {
-				active: this.active,
-				...this.activeMap,
-			};
+			return Object.assign({ active: this.active }, this.activeMap);
 		},
 	},
 
@@ -71,7 +68,7 @@ export const BreakpointComponent = Vue.extend({
 	render(createElement: CreateElement): VNode {
 		// Reference context up front for reactivity.
 		// Copy this so internals can't be affected.
-		const ctx = { ...this.context };
+		const ctx = Object.assign({}, this.context);
 		// If the slot scope isn't used,
 		// render default slot.
 		if (!this.$scopedSlots.default) {

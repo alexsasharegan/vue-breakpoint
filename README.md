@@ -10,6 +10,8 @@ A vue layout component to provide dynamic, reactive media query information.
 Uses the
 [match media api](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia).
 
+Heavily inspired from [Full Stack Radio #81](http://www.fullstackradio.com/81) [vue-mq](https://github.com/AlexandreBonaventure/vue-mq)
+
 ## Install
 
 ```sh

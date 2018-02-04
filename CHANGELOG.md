@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/alexsasharegan/vue-layout/compare/v1.1.2...v2.0.0) (2018-02-04)
+
+
+### Code Refactoring
+
+* improve file structure ([00595c6](https://github.com/alexsasharegan/vue-layout/commit/00595c6))
+
+
+### BREAKING CHANGES
+
+* moved the bootstrap 4 default breakpoint map
+
+
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/alexsasharegan/vue-layout/compare/v1.1.1...v1.1.2) (2018-02-04)
 

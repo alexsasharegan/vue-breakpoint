@@ -1,20 +1,19 @@
 import { PluginObject, CreateElement, VNode } from "vue";
 import { MediaQueryMap, FlattenMediaQueryMap } from "../../core/toMQS";
-import { SubscribeToMediaQuery, Bootstrap4Grid } from "../../core/matchMedia";
+import { SubscribeToMediaQuery } from "../../core/matchMedia";
+import { Bootstrap4Grid } from "./mediaQueryMap";
 
 export const BreakpointPlugin: PluginObject<MediaQueryMap> = {
+	name: "BreakpointPlugin",
 	install(Vue, mqm = Bootstrap4Grid()) {
 		type ActiveMap = { [alias: string]: boolean };
 		const flatMap = FlattenMediaQueryMap(mqm);
 
 		const Rx = new Vue({
-			data: Object.assign(
-				{ active: "" },
-				Object.keys(flatMap).reduce((map: ActiveMap, alias: string) => {
-					map[alias] = false;
-					return map;
-				}, {})
-			),
+			data: Object.keys(flatMap).reduce((map: ActiveMap, alias: string) => {
+				map[alias] = false;
+				return map;
+			}, {}),
 		});
 
 		for (let alias of Object.keys(flatMap)) {
@@ -25,7 +24,6 @@ export const BreakpointPlugin: PluginObject<MediaQueryMap> = {
 				}
 
 				Rx.$data[alias] = true;
-				Rx.$data.active = alias;
 			});
 		}
 
@@ -46,20 +44,21 @@ export const BreakpointPlugin: PluginObject<MediaQueryMap> = {
 					// If the slot scope isn't used,
 					// render default slot.
 					if (!this.$scopedSlots.default) {
+						// Wrap multiple elements in root div.
+						if (this.$slots.default.length > 1) {
+							return createElement("div", this.$slots.default);
+						}
+
 						return this.$slots.default[0];
 					}
 
-					const rendered = this.$scopedSlots.default(ctx);
+					const scoped: VNode = this.$scopedSlots.default(ctx) as any;
 
-					if (typeof rendered == "string") {
-						return createElement("span", rendered);
+					if (this.$slots.default) {
+						return createElement("div", [...this.$slots.default, scoped]);
 					}
 
-					if (Array.isArray(rendered) && Array.isArray(rendered[0])) {
-						throw new TypeError(`Cannot render an array of children.`);
-					}
-
-					return rendered[0];
+					return scoped;
 				},
 			})
 		);

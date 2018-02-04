@@ -1,9 +1,12 @@
 // @ts-ignore
 import Vue, { VueConstructor } from "vue";
 import { MediaQueryFlatMap, FlattenMediaQueryMap } from "../../core/toMQS";
-import { SubscribeToMediaQuery, Bootstrap4Grid } from "../../core/matchMedia";
+import { SubscribeToMediaQuery } from "../../core/matchMedia";
 import { VNode } from "vue/types/vnode";
 import { CreateElement } from "vue/types/vue";
+import { Bootstrap4Grid } from "./mediaQueryMap";
+
+export type ActiveMap = { [alias: string]: boolean };
 
 export const BreakpointComponent = Vue.extend({
 	name: "breakpoint",
@@ -17,74 +20,90 @@ export const BreakpointComponent = Vue.extend({
 	},
 
 	data(): {
-		flatMap: MediaQueryFlatMap;
-		active: string;
 		unsubscribe: Array<() => void>;
-		activeMap: { [alias: string]: boolean };
+		activeMap: ActiveMap;
 	} {
 		return {
-			flatMap: FlattenMediaQueryMap(this.breakpointMap),
-			active: "",
 			unsubscribe: [],
 			activeMap: Object.keys(this.breakpointMap).reduce(
-				(map: { [alias: string]: boolean }, alias: string) => {
+				(map: ActiveMap, alias: string) => {
 					map[alias] = false;
 					return map;
 				},
-				Object.create(null)
+				{}
 			),
 		};
 	},
 
+	watch: {
+		flatMap() {
+			this.unsubscribe();
+			this.initMediaQueries();
+		},
+	},
+
 	computed: {
-		context(): { [alias: string]: boolean | string } {
-			return Object.assign({ active: this.active }, this.activeMap);
+		flatMap(): MediaQueryFlatMap {
+			return FlattenMediaQueryMap(this.breakpointMap);
+		},
+		context(): ActiveMap {
+			return Object.assign({}, this.activeMap);
+		},
+	},
+
+	methods: {
+		initMediaQueries(): void {
+			for (let alias of Object.keys(this.flatMap)) {
+				this.unsubscribe.push(
+					SubscribeToMediaQuery(this.flatMap[alias], mql => {
+						if (!mql.matches) {
+							this.activeMap[alias] = false;
+							return;
+						}
+
+						this.activeMap[alias] = true;
+					})
+				);
+			}
+		},
+		unsubscribe(): void {
+			let unsubscribe: () => void;
+			for (unsubscribe of this.unsubscribe) {
+				unsubscribe();
+			}
 		},
 	},
 
 	created() {
-		for (let alias of Object.keys(this.flatMap)) {
-			this.unsubscribe.push(
-				SubscribeToMediaQuery(this.flatMap[alias], mql => {
-					if (!mql.matches) {
-						this.activeMap[alias] = false;
-						return;
-					}
-
-					this.activeMap[alias] = true;
-					this.active = alias;
-				})
-			);
-		}
+		this.initMediaQueries();
 	},
 
 	beforeDestroy() {
-		let unsubscribe: () => void;
-		for (unsubscribe of this.unsubscribe) {
-			unsubscribe();
-		}
+		this.unsubscribe();
 	},
 
 	render(createElement: CreateElement): VNode {
 		// Reference context up front for reactivity.
 		// Copy this so internals can't be affected.
 		const ctx = Object.assign({}, this.context);
+
 		// If the slot scope isn't used,
 		// render default slot.
 		if (!this.$scopedSlots.default) {
+			// Wrap multiple elements in root div.
+			if (this.$slots.default.length > 1) {
+				return createElement("div", this.$slots.default);
+			}
+
 			return this.$slots.default[0];
 		}
 
-		const rendered = this.$scopedSlots.default(ctx);
+		const scoped: VNode = this.$scopedSlots.default(ctx) as any;
 
-		if (typeof rendered == "string") {
-			return createElement("span", rendered);
+		if (this.$slots.default) {
+			return createElement("div", [...this.$slots.default, scoped]);
 		}
 
-		if (Array.isArray(rendered) && Array.isArray(rendered[0])) {
-			throw new TypeError(`Cannot render an array of children.`);
-		}
-
-		return rendered[0];
+		return scoped;
 	},
 });

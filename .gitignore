@@ -1,5 +1,6 @@
 .*
 !.gitignore
+!.prettierrc
 
 node_modules/
 lib/

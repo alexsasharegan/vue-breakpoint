@@ -3,7 +3,11 @@
 	"version": "1.0.0",
 	"description": "A set of layout components for Vue.js",
 	"main": "lib/index.js",
-	"files": ["lib", "LICENSE", "README.md"],
+	"files": [
+		"lib",
+		"LICENSE",
+		"README.md"
+	],
 	"scripts": {
 		"clean": "rm -Rf lib",
 		"predev": "npm run clean",
@@ -22,7 +26,11 @@
 		"type": "git",
 		"url": "git+https://github.com/alexsasharegan/vue-layout.git"
 	},
-	"keywords": ["vue", "vuejs", "layout"],
+	"keywords": [
+		"vue",
+		"vuejs",
+		"layout"
+	],
 	"author": "Alex Regan",
 	"license": "MIT",
 	"bugs": {
@@ -42,7 +50,10 @@
 		"webpack": "^3.10.0"
 	},
 	"jest": {
-		"moduleFileExtensions": ["ts", "js"],
+		"moduleFileExtensions": [
+			"ts",
+			"js"
+		],
 		"transform": {
 			"\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
 		},
@@ -50,7 +61,14 @@
 			"**/__tests__/?(*.)(spec|test).(ts|js)",
 			"**/?(*.)(spec|test).(js|ts)"
 		],
-		"collectCoverageFrom": ["src/**/*.{js,ts}", "!src/**/*.d.ts"],
+		"collectCoverageFrom": [
+			"src/**/*.{js,ts}",
+			"!src/**/*.d.ts"
+		],
 		"mapCoverage": true
+	},
+	"dependencies": {
+		"vue-class-component": "^6.1.2",
+		"vue-property-decorator": "^6.0.0"
 	}
 }

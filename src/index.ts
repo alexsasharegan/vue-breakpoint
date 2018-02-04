@@ -1,14 +1,11 @@
-import {
-	BreakpointComponent,
-	name as BreakpointName,
-} from "./components/breakpoint";
+import { BreakpointComponent } from "./components/breakpoint/component";
 import { PluginObject } from "vue";
 
 export { BreakpointComponent };
 
 export const VueLayoutPlugin: PluginObject<{}> = {
 	install(V, options) {
-		V.component(BreakpointName, BreakpointComponent);
+		V.component("BreakpointComponent", BreakpointComponent);
 	},
 	name: "vue-layout",
 };

@@ -5,6 +5,13 @@ export type MediaQueryObject = {
 	[mediaFeature: string]: string | boolean;
 };
 
+export type MediaQueryMap = {
+	[mediaAlias: string]: MediaQueryObject | MediaQueryObject[];
+};
+export type MediaQueryFlatMap = {
+	[mediaAlias: string]: MediaQueryString;
+};
+
 function mqo2str(mqo: MediaQueryObject): MediaQueryString {
 	let feat: string;
 	let val: string | boolean;
@@ -35,4 +42,22 @@ function mqo2str(mqo: MediaQueryObject): MediaQueryString {
 
 export function toMQS(...mqos: MediaQueryObject[]): MediaQueryString {
 	return mqos.map(mqo2str).join(", ");
+}
+
+export function FlattenMediaQueryMap(map: MediaQueryMap): MediaQueryFlatMap {
+	const flat: MediaQueryFlatMap = Object.create(null);
+	let alias: string;
+	let mqo: MediaQueryObject | MediaQueryObject[];
+
+	for (alias of Object.keys(map)) {
+		mqo = map[alias];
+
+		if (!Array.isArray(mqo)) {
+			mqo = [mqo];
+		}
+
+		flat[alias] = toMQS(...mqo);
+	}
+
+	return flat;
 }

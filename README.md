@@ -90,7 +90,7 @@ const MyParentComponent = Vue.extend({
 });
 ```
 
-## How Do I Use It?
+## Usage
 
 Start off by determining your own set of media queries/breakpoints, or use the
 built-in bootstrap 4 style map. You can find it's definition
@@ -111,6 +111,7 @@ breakpoint values. For example:
 		<!-- for whether or not their condition is met. -->
 		<!-- Remember, these are based on the query map keys provided. -->
 		<p v-if="media.lgUp">I'm on a large screen!</p>
+		<p v-if="media.mdOnly">I'm in-between...</p>
 		<p v-if="media.smDown">I'm on a small screen!</p>
 	</main>
 </breakpoint>
@@ -122,11 +123,48 @@ relevant values more easily.
 ```html
 <breakpoint>
 	<main slot-scope="{ lgUp, smDown }">
-		<h1>Hello world!</h1>
-		<p v-if="lgUp">I'm on a large screen!</p>
-		<p v-if="smDown">I'm on a small screen!</p>
+		<my-navbar v-if="media.mdUp" />
+		<my-mobile-navbar v-if="media.smDown" />
+		<section :class="['content', {'font-size-mobile': media.smDown}">
+			<h1>Hello world!</h1>
+			<p v-if="lgUp">I'm on a large screen!</p>
+			<p v-if="smDown">I'm on a small screen!</p>
+		</section>
 	</main>
 </breakpoint>
+```
+
+When you need custom, one-off breakpoint logic, use the discrete component.
+
+```html
+<!-- Main grid setup -->
+<breakpoint>
+	<main slot-scope="media">
+		<my-navbar v-if="media.mdUp" />
+		<my-mobile-navbar v-if="media.smDown" />
+		<router-view />
+		<!-- Unique media queries -->
+		<custom-breakpoint breakpoint-map="breakpointMap">
+			<p slot-scope="{ mobileLandscape }" v-if="mobileLandscape">
+				For best viewing, we recommend portrait orientation.
+			</p>
+		</custom-breakpoint>
+	</main>
+</breakpoint>
+
+<script>
+/* Regist the component and setup the query map. */
+new Vue({
+	components: {
+		"custom-breakpoint": VueBreakpoint.BreakpointComponent
+	},
+	data: {
+		breakpointMap: {
+			mobileLandscape: { screen: true, orientation: 'landscape' }
+		}
+	}
+})
+</script>
 ```
 
 For more info, consult the Vue documentation on

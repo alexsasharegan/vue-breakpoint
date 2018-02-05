@@ -9,101 +9,101 @@ import { Bootstrap4Grid } from "./mediaQueryMap";
 export type ActiveMap = { [alias: string]: boolean };
 
 export const BreakpointComponent = Vue.extend({
-	name: "breakpoint",
+  name: "breakpoint",
 
-	props: {
-		breakpointMap: {
-			required: true,
-			type: Object,
-			default: Bootstrap4Grid,
-		},
-	},
+  props: {
+    breakpointMap: {
+      required: true,
+      type: Object,
+      default: Bootstrap4Grid,
+    },
+  },
 
-	data(): {
-		unsubscribe: Array<() => void>;
-		activeMap: ActiveMap;
-	} {
-		return {
-			unsubscribe: [],
-			activeMap: Object.keys(this.breakpointMap).reduce(
-				(map: ActiveMap, alias: string) => {
-					map[alias] = false;
-					return map;
-				},
-				{}
-			),
-		};
-	},
+  data(): {
+    unsubscribe: Array<() => void>;
+    activeMap: ActiveMap;
+  } {
+    return {
+      unsubscribe: [],
+      activeMap: Object.keys(this.breakpointMap).reduce(
+        (map: ActiveMap, alias: string) => {
+          map[alias] = false;
+          return map;
+        },
+        {}
+      ),
+    };
+  },
 
-	watch: {
-		flatMap() {
-			this.unsubscribe();
-			this.initMediaQueries();
-		},
-	},
+  watch: {
+    flatMap() {
+      this.unsubscribe();
+      this.initMediaQueries();
+    },
+  },
 
-	computed: {
-		flatMap(): MediaQueryFlatMap {
-			return FlattenMediaQueryMap(this.breakpointMap);
-		},
-		context(): ActiveMap {
-			return Object.assign({}, this.activeMap);
-		},
-	},
+  computed: {
+    flatMap(): MediaQueryFlatMap {
+      return FlattenMediaQueryMap(this.breakpointMap);
+    },
+    context(): ActiveMap {
+      return Object.assign({}, this.activeMap);
+    },
+  },
 
-	methods: {
-		initMediaQueries(): void {
-			for (let alias of Object.keys(this.flatMap)) {
-				this.unsubscribe.push(
-					SubscribeToMediaQuery(this.flatMap[alias], mql => {
-						if (!mql.matches) {
-							this.activeMap[alias] = false;
-							return;
-						}
+  methods: {
+    initMediaQueries(): void {
+      for (let alias of Object.keys(this.flatMap)) {
+        this.unsubscribe.push(
+          SubscribeToMediaQuery(this.flatMap[alias], mql => {
+            if (!mql.matches) {
+              this.activeMap[alias] = false;
+              return;
+            }
 
-						this.activeMap[alias] = true;
-					})
-				);
-			}
-		},
-		unsubscribe(): void {
-			let unsubscribe: () => void;
-			for (unsubscribe of this.unsubscribe) {
-				unsubscribe();
-			}
-		},
-	},
+            this.activeMap[alias] = true;
+          })
+        );
+      }
+    },
+    unsubscribe(): void {
+      let unsubscribe: () => void;
+      for (unsubscribe of this.unsubscribe) {
+        unsubscribe();
+      }
+    },
+  },
 
-	created() {
-		this.initMediaQueries();
-	},
+  created() {
+    this.initMediaQueries();
+  },
 
-	beforeDestroy() {
-		this.unsubscribe();
-	},
+  beforeDestroy() {
+    this.unsubscribe();
+  },
 
-	render(createElement: CreateElement): VNode {
-		// Reference context up front for reactivity.
-		// Copy this so internals can't be affected.
-		const ctx = Object.assign({}, this.context);
+  render(createElement: CreateElement): VNode {
+    // Reference context up front for reactivity.
+    // Copy this so internals can't be affected.
+    const ctx = Object.assign({}, this.context);
 
-		// If the slot scope isn't used,
-		// render default slot.
-		if (!this.$scopedSlots.default) {
-			// Wrap multiple elements in root div.
-			if (this.$slots.default.length > 1) {
-				return createElement("div", this.$slots.default);
-			}
+    // If the slot scope isn't used,
+    // render default slot.
+    if (!this.$scopedSlots.default) {
+      // Wrap multiple elements in root div.
+      if (this.$slots.default.length > 1) {
+        return createElement("div", this.$slots.default);
+      }
 
-			return this.$slots.default[0];
-		}
+      return this.$slots.default[0];
+    }
 
-		const scoped: VNode = this.$scopedSlots.default(ctx) as any;
+    const scoped: VNode = this.$scopedSlots.default(ctx) as any;
 
-		if (this.$slots.default) {
-			return createElement("div", [...this.$slots.default, scoped]);
-		}
+    if (this.$slots.default) {
+      return createElement("div", [...this.$slots.default, scoped]);
+    }
 
-		return scoped;
-	},
+    return scoped;
+  },
 });

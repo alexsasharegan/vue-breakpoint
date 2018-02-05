@@ -9,15 +9,15 @@ export type UnsubscribeFunc = () => void;
  * An unsubscribe function is returned.
  */
 export function SubscribeToMediaQuery(
-	query: MediaQueryString,
-	callback: MediaQueryListListener
+  query: MediaQueryString,
+  callback: MediaQueryListListener
 ): UnsubscribeFunc {
-	const mql = window.matchMedia(query);
-	const unsubscribe = () => mql.removeListener(callback);
+  const mql = window.matchMedia(query);
+  const unsubscribe = () => mql.removeListener(callback);
 
-	mql.addListener(callback);
-	// Trigger initial state since mql fires onchange.
-	callback(mql);
+  mql.addListener(callback);
+  // Trigger initial state since mql fires onchange.
+  callback(mql);
 
-	return unsubscribe;
+  return unsubscribe;
 }

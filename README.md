@@ -63,7 +63,8 @@ Vue.use(BreakpointPlugin, {
 ```
 
 For a better look at the possibilities of the media queries, have a look at the
-query builder's [test suite](./src/core/toMQS.test.ts)
+query builder's [test suite](./src/core/toMQS.test.ts). Also check out
+[CSS Tricks for media queries](https://css-tricks.com/snippets/css/media-queries-for-standard-devices/).
 
 ### BreakpointComponent
 

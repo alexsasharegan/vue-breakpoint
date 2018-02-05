@@ -53,12 +53,12 @@ import { BreakpointPlugin } from "vue-breakpoint";
 const { BreakpointPlugin } = window.VueBreakpoint;
 
 Vue.use(BreakpointPlugin, {
-	print: { print: true },
-	portrait: { orientation: "portrait" },
-	mobile: { maxWidth: "600px" },
-	mobilePortrait: { maxWidth: "600px", orientation: "portrait" },
-	tablet: { minWidth: "601px", maxWidth: "800px" },
-	desktop: { minWidth: "801px" },
+  print: { print: true },
+  portrait: { orientation: "portrait" },
+  mobile: { maxWidth: "600px" },
+  mobilePortrait: { maxWidth: "600px", orientation: "portrait" },
+  tablet: { minWidth: "601px", maxWidth: "800px" },
+  desktop: { minWidth: "801px" },
 });
 ```
 
@@ -84,9 +84,9 @@ import { BreakpointComponent } from "vue-breakpoint";
 const { BreakpointComponent } = window.VueBreakpoint;
 
 const MyParentComponent = Vue.extend({
-	components: {
-		"my-breakpoint": BreakpointComponent,
-	},
+  components: {
+    "my-breakpoint": BreakpointComponent,
+  },
 });
 ```
 
@@ -104,16 +104,16 @@ breakpoint values. For example:
 
 ```html
 <breakpoint>
-	<!-- `media` now holds our breakpoint values -->
-	<main slot-scope="media">
-		<h1>Hello world!</h1>
-		<!-- The breakpoint values are booleans -->
-		<!-- for whether or not their condition is met. -->
-		<!-- Remember, these are based on the query map keys provided. -->
-		<p v-if="media.lgUp">I'm on a large screen!</p>
-		<p v-if="media.mdOnly">I'm in-between...</p>
-		<p v-if="media.smDown">I'm on a small screen!</p>
-	</main>
+  <!-- `media` now holds our breakpoint values -->
+  <main slot-scope="media">
+    <h1>Hello world!</h1>
+    <!-- The breakpoint values are booleans -->
+    <!-- for whether or not their condition is met. -->
+    <!-- Remember, these are based on the query map keys provided. -->
+    <p v-if="media.lgUp">I'm on a large screen!</p>
+    <p v-if="media.mdOnly">I'm in-between...</p>
+    <p v-if="media.smDown">I'm on a small screen!</p>
+  </main>
 </breakpoint>
 ```
 
@@ -122,15 +122,15 @@ relevant values more easily.
 
 ```html
 <breakpoint>
-	<main slot-scope="{ smDown, mdUp, lgUp }">
-		<my-navbar v-if="mdUp" />
-		<my-mobile-navbar v-if="smDown" />
-		<section :class="['content', {'font-size-mobile': smDown}">
-			<h1>Hello world!</h1>
-			<p v-if="lgUp">I'm on a large screen!</p>
-			<p v-if="smDown">I'm on a small screen!</p>
-		</section>
-	</main>
+  <main slot-scope="{ smDown, mdUp, lgUp }">
+    <my-navbar v-if="mdUp" />
+    <my-mobile-navbar v-if="smDown" />
+    <section :class="['content', {'font-size-mobile': smDown}">
+      <h1>Hello world!</h1>
+      <p v-if="lgUp">I'm on a large screen!</p>
+      <p v-if="smDown">I'm on a small screen!</p>
+    </section>
+  </main>
 </breakpoint>
 ```
 
@@ -139,30 +139,30 @@ When you need custom, one-off breakpoint logic, use the discrete component.
 ```html
 <!-- Main grid setup -->
 <breakpoint>
-	<main slot-scope="media">
-		<my-navbar v-if="media.mdUp" />
-		<my-mobile-navbar v-if="media.smDown" />
-		<router-view />
-		<!-- Unique media queries -->
-		<custom-breakpoint breakpoint-map="breakpointMap">
-			<p slot-scope="{ mobileLandscape }" v-if="mobileLandscape">
-				For best viewing, we recommend portrait orientation.
-			</p>
-		</custom-breakpoint>
-	</main>
+  <main slot-scope="media">
+    <my-navbar v-if="media.mdUp" />
+    <my-mobile-navbar v-if="media.smDown" />
+    <router-view />
+    <!-- Unique media queries -->
+    <custom-breakpoint breakpoint-map="breakpointMap">
+      <p slot-scope="{ mobileLandscape }" v-if="mobileLandscape">
+        For best viewing, we recommend portrait orientation.
+      </p>
+    </custom-breakpoint>
+  </main>
 </breakpoint>
 
 <script>
 /* Register the component and setup the query map. */
 new Vue({
-	components: {
-		"custom-breakpoint": VueBreakpoint.BreakpointComponent
-	},
-	data: {
-		breakpointMap: {
-			mobileLandscape: { screen: true, orientation: 'landscape' }
-		}
-	}
+  components: {
+    "custom-breakpoint": VueBreakpoint.BreakpointComponent
+  },
+  data: {
+    breakpointMap: {
+      mobileLandscape: { screen: true, orientation: 'landscape' }
+    }
+  }
 })
 </script>
 ```

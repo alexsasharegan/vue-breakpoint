@@ -153,7 +153,7 @@ When you need custom, one-off breakpoint logic, use the discrete component.
 </breakpoint>
 
 <script>
-/* Regist the component and setup the query map. */
+/* Register the component and setup the query map. */
 new Vue({
 	components: {
 		"custom-breakpoint": VueBreakpoint.BreakpointComponent

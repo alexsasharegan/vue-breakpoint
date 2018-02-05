@@ -122,10 +122,10 @@ relevant values more easily.
 
 ```html
 <breakpoint>
-	<main slot-scope="{ lgUp, smDown }">
-		<my-navbar v-if="media.mdUp" />
-		<my-mobile-navbar v-if="media.smDown" />
-		<section :class="['content', {'font-size-mobile': media.smDown}">
+	<main slot-scope="{ smDown, mdUp, lgUp }">
+		<my-navbar v-if="mdUp" />
+		<my-mobile-navbar v-if="smDown" />
+		<section :class="['content', {'font-size-mobile': smDown}">
 			<h1>Hello world!</h1>
 			<p v-if="lgUp">I'm on a large screen!</p>
 			<p v-if="smDown">I'm on a small screen!</p>

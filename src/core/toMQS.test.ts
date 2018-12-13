@@ -1,6 +1,12 @@
 import { toMQS, MediaQueryObject } from "./toMQS";
 
-const testCases = [
+interface TestCase {
+  input: MediaQueryObject[];
+  output: string;
+}
+
+// TableTests
+const tt: TestCase[] = [
   {
     input: [{ screen: true }],
     output: "screen",
@@ -55,7 +61,7 @@ describe("toMQS (toMediaQueryString)", () => {
     let input: MediaQueryObject[];
     let output: string;
 
-    for ({ input, output } of testCases) {
+    for ({ input, output } of tt) {
       expect(toMQS(...input)).toEqual(output);
     }
   });

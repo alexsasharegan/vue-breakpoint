@@ -45,11 +45,11 @@ export const BreakpointPlugin: PluginObject<MediaQueryMap> = {
           // render default slot.
           if (!this.$scopedSlots.default) {
             // Wrap multiple elements in root div.
-            if (this.$slots.default.length > 1) {
+            if ((this.$slots.default || []).length > 1) {
               return createElement("div", this.$slots.default);
             }
 
-            return this.$slots.default[0];
+            return (this.$slots.default || [])[0];
           }
 
           const scoped: VNode = this.$scopedSlots.default(ctx) as any;

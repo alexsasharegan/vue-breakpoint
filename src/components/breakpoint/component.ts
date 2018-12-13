@@ -1,7 +1,7 @@
 // @ts-ignore
 import Vue, { VueConstructor } from "vue";
 import { MediaQueryFlatMap, FlattenMediaQueryMap } from "../../core/toMQS";
-import { SubscribeToMediaQuery } from "../../core/matchMedia";
+import { SubscribeToMediaQuery, UnsubscribeFunc } from "../../core/matchMedia";
 import { VNode } from "vue/types/vnode";
 import { CreateElement } from "vue/types/vue";
 import { Bootstrap4Grid } from "./mediaQueryMap";
@@ -20,11 +20,11 @@ export const BreakpointComponent = Vue.extend({
   },
 
   data(): {
-    unsubscribe: Array<() => void>;
+    subscriptions: Array<() => void>;
     activeMap: ActiveMap;
   } {
     return {
-      unsubscribe: [],
+      subscriptions: [],
       activeMap: Object.keys(this.breakpointMap).reduce(
         (map: ActiveMap, alias: string) => {
           map[alias] = false;
@@ -54,7 +54,7 @@ export const BreakpointComponent = Vue.extend({
   methods: {
     initMediaQueries(): void {
       for (let alias of Object.keys(this.flatMap)) {
-        this.unsubscribe.push(
+        this.subscriptions.push(
           SubscribeToMediaQuery(this.flatMap[alias], mql => {
             if (!mql.matches) {
               this.activeMap[alias] = false;
@@ -67,9 +67,9 @@ export const BreakpointComponent = Vue.extend({
       }
     },
     unsubscribe(): void {
-      let unsubscribe: () => void;
-      for (unsubscribe of this.unsubscribe) {
-        unsubscribe();
+      let fn: UnsubscribeFunc;
+      for (fn of this.subscriptions) {
+        fn();
       }
     },
   },

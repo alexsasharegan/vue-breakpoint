@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/alexsasharegan/vue-layout/compare/v2.0.0...v2.1.0) (2018-12-13)
+
+
+### Bug Fixes
+
+* handle missing slot edge cases ([1e281b7](https://github.com/alexsasharegan/vue-layout/commit/1e281b7))
+* handle naming collision ([d90f637](https://github.com/alexsasharegan/vue-layout/commit/d90f637)), closes [#1](https://github.com/alexsasharegan/vue-layout/issues/1)
+
+
+### Features
+
+* update matchMedia to use new api or fallback ([7d7aef4](https://github.com/alexsasharegan/vue-layout/commit/7d7aef4))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/alexsasharegan/vue-layout/compare/v1.1.2...v2.0.0) (2018-02-04)
 
